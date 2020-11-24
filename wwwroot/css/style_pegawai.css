@@ -1,0 +1,39 @@
+.depan {
+    background: url("http://spidolpertamina.com/logo-aset/pegawai.png");
+    background-repeat: no-repeat;
+    background-size: 72mm 110mm;
+}
+
+/* .depan {
+    background: url("https://localhost:4001/logo-aset/amt.png") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  } */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.atas td {
+    /* border: 1px solid gray; */
+    font-size: 20px;
+    color: white;
+    text-align: left;
+}
+
+.atas {
+    padding-top: 35px;
+}
+
+.tengah td {
+    /* border: 1px solid gray; */
+    font-size: 20px;
+    text-align: left;
+}
+
+.tengah {
+    padding-top: 5px;
+}

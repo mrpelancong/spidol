@@ -1,0 +1,123 @@
+Pengajuan
+field status_pengajuan
+("0","1","2","3")
+(Baru, , Dalam proses(acc admin), Acc, Tolak)
+- Get All
+    http://localhost:4000/api/pengajuan/
+- By Id
+    http://localhost:4000/api/pengajuan/1
+-By Status
+    http://localhost:4000/api/pengajuan/status/1
+
+- Delete Pengajuan{Delete}
+    http://localhost:4000/api/pengajuan/
+
+- Tambah Pengajuan{Post}
+    http://localhost:4000/api/pengajuan/
+    bulk Edit:
+        vendorId:2
+        jenisId:1
+        nik:1671717171711234
+        nama_lengkap:Sumijan
+        alamat:Palembang
+        no_telp:08123123123
+        tgl_pengajuan:2020-08-01
+        keterangan:Satu
+        surat_permohonan:pdf
+        surat_pernyataan:pdf
+        file_ktp:gambar
+        file_biodata:pdf
+        file_foto:gambar
+        file_skck:pdf
+        file_surat_sehat:pdf
+        surat_bebas_narkoba:pdf
+        file_pendukung:pdf
+
+- Update Pengajuan{Put}
+    http://localhost:4000/api/pengajuan/
+    bulk Edit:
+        id:1
+        vendorId:2
+        jenisId:1
+        nama_lengkap:Sumijan
+        alamat:Palembang
+        no_telp:08123123123
+        tgl_pengajuan:2020-08-01
+        keterangan:Satu
+        surat_permohonan:pdf
+        surat_pernyataan:pdf
+        file_ktp:gambar
+        file_biodata:pdf
+        file_foto:gambar
+        file_skck:pdf
+        file_surat_sehat:pdf
+        surat_bebas_narkoba:pdf
+        file_pendukung:pdf
+
+
+
+CREATE TABLE [tb_wilayah]
+(
+  [id] int PRIMARY KEY IDENTITY(1, 1),
+  [nama_wilayah] varchar(100) NOT NULL,
+  [status_wilayah] nvarchar(255) NOT NULL CHECK ([status_wilayah] IN ('0', '1')),
+  [sistem_created_time] datetime NOT NULL default ('1900-01-01'),
+  [sistem_updated_time] datetime NOT NULL default ('1900-01-01'),
+);
+
+EXEC sp_addextendedproperty
+@name = N'Column_Description',
+@value = '0=Non-Aktif, 1=Aktif',
+@level0type = N'Schema', @level0name = 'dbo',
+@level1type = N'Table',  @level1name = 'tb_wilayah',
+@level2type = N'Column', @level2name = 'status_wilayah';
+
+ALTER TABLE [tb_user] ADD 
+[wilayahId] int;
+
+ALTER TABLE [tb_user] ADD FOREIGN KEY ([wilayahId]) REFERENCES [tb_wilayah] ([id]) ON DELETE CASCADE
+
+CREATE INDEX [wilayahId] ON [tb_user] ("wilayahId")
+
+ALTER TABLE [tb_idcard] ADD 
+[tanggal] date NOT NULL default ('1900-01-01'),
+[masa_berlaku] date NOT NULL default ('1900-01-01');
+
+
+API Wilayah
+Get -> http://localhost:4000/api/wilayah
+Get By Id -> http://localhost:4000/api/wilayah/1
+
+Post -> http://localhost:4000/api/wilayah
+    bulk edit:
+    nama_wilayah:Palembang
+
+Put -> http://localhost:4000/api/wilayah
+    bulk edit:
+    id:1
+    nama_wilayah:Palembang
+
+Delete -> http://localhost:4000/api/wilayah/1
+
+Penambahan variabel pada api tambah user, pegawai dan vendor
+    bulk edit:
+    wilayahId:1
+
+Perubahan Proses pengajuan
+- Api Input dari Vendor atau pegawai tetap sama
+- setelah proses upload file pada data pengajuan selesai semua, proses acc admin dipindahkan ke vendor/pegawai
+- jadi ada tombol per pengajuan yang sudah siap diteruskan ke pimpinan
+- API : 
+    - POST : http://localhost:4000/api/proses/send
+        bulk edit:
+        id:1 (ini id pengajuan)
+
+- halaman admin yang munculin list pengajuan untuk di acc admin dihilangkan saja
+- proses selanjutnya tetap sama, setelah vendor/pegawai send pengajuan, proses akan mencari pimpinan yang terkait dengan jenis dan struktur dari pengajuan yang dikirim
+- sampai pada struktur pimpinan paling tinggi dan proses pengajuan selesai
+
+jalankan di heidi
+ALTER TABLE [tb_pengajuan]
+ADD [perpanjangan] BIT default 'FALSE';
+ALTER TABLE [tb_idcard]
+ADD [status] BIT default 'TRUE'; 
